@@ -131,7 +131,27 @@ const quasar = useQuasar();
 const router = useRouter();
 const loading = ref(false);
 const user = JSON.parse(LocalStorage.getItem("user"));
-// alert(LocalStorage.getItem("token"));
+
+async function fetch_user_account() {
+  try {
+    const response = await axios.get(
+      "http://127.0.0.1:8000/api/user",
+      {}, // You can send your request body here if needed
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    console.log(response.data);
+  } catch (error) {
+    console.error("Error fetching user account:", error);
+  }
+}
+
+fetch_user_account();
 const signOut = async () => {
   try {
     loading.value = true;

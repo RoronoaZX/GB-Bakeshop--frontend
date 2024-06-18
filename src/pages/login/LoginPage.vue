@@ -76,8 +76,8 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 
 const isPwd = ref(true);
-const username = ref("alverta25@example.net");
-const password = ref("admin123");
+const username = ref("admin@gmail.com");
+const password = ref("badodo");
 
 const loading = ref(false);
 
@@ -110,8 +110,8 @@ const login = async () => {
 
     if (response.data.token) {
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("role", response.data.role);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      // localStorage.setItem("role", response.data.role);
+      // localStorage.setItem("user", JSON.stringify(response.data.user));
       quasar.notify({
         position: "top",
         color: "positive",
