@@ -26,7 +26,7 @@
     </div>
     <q-table
       v-else
-      class="table-container elegant-container"
+      class="table-container elegant-container sticky-header"
       :filter="filter"
       :virtual-scroll-sticky-size-start="48"
       flat

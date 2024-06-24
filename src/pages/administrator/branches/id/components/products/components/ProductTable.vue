@@ -28,8 +28,8 @@
 
     <q-table
       v-else
-      class="table-container"
       :filter="filter"
+      class="table-container"
       :virtual-scroll-sticky-size-start="48"
       flat
       :columns="productListColumns"
@@ -74,72 +74,25 @@
 import { ref, computed, onMounted, watch } from "vue";
 import ProductEdit from "./ProductEdit.vue";
 import ProductDelete from "./ProductDelete.vue";
+import { useRoute } from "vue-router";
 import { api } from "src/boot/axios";
-import { useBranchIdStore } from "src/stores/branch-id-store";
-import { Notify } from "quasar";
 
-const props = defineProps({
-  branchId: {
-    type: Number,
-    required: true,
-  },
-});
-
-const branchProductStore = useBranchIdStore();
-const filter = ref("");
-const loading = ref(true);
-const branchProducts = ref([]);
-const showNoDataMessage = ref(false);
 const pagination = ref({
   rowsPerPage: 0,
 });
-const branchProductRows = computed(() => branchProductStore.branchProducts);
+const route = useRoute();
+const branchId = ref(route.params.branch_id);
 
-const filteredRows = computed(() => {
-  if (!filter.value) {
-    return branchProductRows.value;
-  }
-  return branchProductRows.value.filter((row) =>
-    row.name.toLowerCase().includes(filter.value.toLowerCase())
-  );
-});
-
-onMounted(async () => {
-  await reloadTableData();
-});
-
-watch(
-  () => props.branchId,
-
-  async (newBranchId) => {
-    if (newBranchId) {
-      await fetchBranchProducts();
-    }
-  }
-);
-
-const reloadTableData = async () => {
-  try {
-    loading.value = true;
-    branchProductRows.value = await branchProductStore.fetchBranchProducts();
-    if (!branchProductRows.value.length) {
-      showNoDataMessage.value = true;
-    }
-
-    console.log("Branch product", branchProductRows.value);
-  } catch (error) {
-    console.log("Error fetching branch product:", error);
-    showNoDataMessage.value = true;
-  } finally {
-    loading.value = false;
-  }
-};
+const branchProducts = ref([]);
+const filter = ref("");
+console.log(filter);
+const loading = ref(true);
+const showNoDataMessage = ref(false);
 
 const fetchBranchProducts = async () => {
   try {
     loading.value = true;
-    const response = await api.get(`/branch-products/${props.branchId}`);
-    console.log("response", response);
+    const response = await api.get(`/branches/${branchId.value}/products`);
     branchProducts.value = response.data;
     showNoDataMessage.value = branchProducts.value.length === 0;
   } catch (error) {
@@ -150,12 +103,112 @@ const fetchBranchProducts = async () => {
   }
 };
 
+onMounted(() => {
+  fetchBranchProducts();
+});
+
+watch(route, () => {
+  branchId.value = route.params.branchId;
+  fetchBranchProducts();
+});
+
+const filteredRows = computed(() => {
+  if (!filter.value) {
+    return branchProducts.value;
+  }
+  return branchProducts.value.filter((row) => {
+    row.product.name.toLowerCase().includes(filter.value.toLowerCase());
+  });
+});
 watch(filter, async (newFilter) => {
   loading.value = true;
   await new Promise((resolve) => setTimeout(resolve, 1000));
   loading.value = false;
   showNoDataMessage.value = filteredRows.value.length === 0;
 });
+
+// import { api } from "src/boot/axios";
+// import { useBranchIdStore } from "src/stores/branch-id-store";
+// import { Notify } from "quasar";
+
+// const props = defineProps({
+//   branchId: {
+//     type: Number,
+//     required: true,
+//   },
+// });
+
+// const branchProductStore = useBranchIdStore();
+// const filter = ref("");
+// const loading = ref(true);
+// const branchProducts = ref([]);
+// const showNoDataMessage = ref(false);
+// const pagination = ref({
+//   rowsPerPage: 0,
+// });
+// const branchProductRows = computed(() => branchProductStore.branchProducts);
+
+// const filteredRows = computed(() => {
+//   if (!filter.value) {
+//     return branchProductRows.value;
+//   }
+//   return branchProductRows.value.filter((row) =>
+//     row.name.toLowerCase().includes(filter.value.toLowerCase())
+//   );
+// });
+
+// onMounted(async () => {
+//   await reloadTableData();
+// });
+
+// watch(
+//   () => props.branchId,
+
+//   async (newBranchId) => {
+//     if (newBranchId) {
+//       await fetchBranchProducts();
+//     }
+//   }
+// );
+
+// const reloadTableData = async () => {
+//   try {
+//     loading.value = true;
+//     branchProductRows.value = await branchProductStore.fetchBranchProducts();
+//     if (!branchProductRows.value.length) {
+//       showNoDataMessage.value = true;
+//     }
+
+//     console.log("Branch product", branchProductRows.value);
+//   } catch (error) {
+//     console.log("Error fetching branch product:", error);
+//     showNoDataMessage.value = true;
+//   } finally {
+//     loading.value = false;
+//   }
+// };
+
+// const fetchBranchProducts = async () => {
+//   try {
+//     loading.value = true;
+//     const response = await api.get(`/branch-products/${props.branchId}`);
+//     console.log("response", response);
+//     branchProducts.value = response.data;
+//     showNoDataMessage.value = branchProducts.value.length === 0;
+//   } catch (error) {
+//     console.error("Error fetching branch products:", error);
+//     showNoDataMessage.value = true;
+//   } finally {
+//     loading.value = false;
+//   }
+// };
+
+// watch(filter, async (newFilter) => {
+//   loading.value = true;
+//   await new Promise((resolve) => setTimeout(resolve, 1000));
+//   loading.value = false;
+//   showNoDataMessage.value = filteredRows.value.length === 0;
+// });
 
 // for fetching data
 // onMounted(async () => {

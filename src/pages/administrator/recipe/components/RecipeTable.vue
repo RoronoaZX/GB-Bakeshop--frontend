@@ -28,7 +28,7 @@
     </div>
     <q-table
       v-else
-      class="table-container elegant-container"
+      class="table-container elegant-container sticky-header"
       :filter="filter"
       :virtual-scroll-sticky-size-start="48"
       flat
@@ -58,6 +58,13 @@
               @keyup.enter="scope.set"
             />
           </q-popup-edit>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-category="props">
+        <q-td key="name" :props="props">
+          <q-badge :color="getBadgeCategoryColor(props.row.category)">
+            {{ props.row.category }}
+          </q-badge>
         </q-td>
       </template>
       <template v-slot:body-cell-availableStocks="props">
@@ -248,6 +255,13 @@ const recipeColumns = [
     sortable: true,
   },
   {
+    name: "category",
+    label: "Category",
+    align: "left",
+    field: "category",
+    sortable: true,
+  },
+  {
     name: "target",
     label: "Target Pcs",
     align: "center",
@@ -284,6 +298,16 @@ const getRawMaterialBadgeColor = (availableStocks) => {
     return "bg-warning";
   } else {
     return "bg-primary";
+  }
+};
+const getBadgeCategoryColor = (category) => {
+  switch (category) {
+    case "Bread":
+      return "brown";
+    case "Filling":
+      return "deep-orange";
+    default:
+      return "grey";
   }
 };
 </script>

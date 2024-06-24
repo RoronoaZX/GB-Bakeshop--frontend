@@ -13,8 +13,8 @@ export async function search_branch_id_service(searchQuery) {
   return response.data;
 }
 
-export async function get_all_branches_products(data) {
-  const response = await api.get("/branch-products", data);
+export async function get_all_branches_products(branchId) {
+  const response = await api.get(`/branches/${branchId}/products`);
   return response.data;
 }
 
