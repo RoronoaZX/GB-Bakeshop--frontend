@@ -49,7 +49,7 @@
               dense
               label="Birthdate"
               type="date"
-              style="width: 230px"
+              style="width: 190px"
               :rules="[(val) => (val && val.length > 0) || 'Required']"
             />
           </div>
@@ -62,7 +62,7 @@
               label="Sex"
               :options="genderOptions"
               :rules="[(val) => (val && val.length > 0) || 'Required']"
-              style="width: 120px"
+              style="width: 80px"
               behavior="menu"
               hide-dropdown-icon
             />
@@ -75,13 +75,66 @@
               dense
               outlined
               hide-dropdown-icon
-              label="Status"
-              style="width: 100px"
+              label="Employment Status"
+              style="width: 180px"
               :rules="[(val) => (val && val.length > 0) || 'Required']"
               behavior="menu"
             />
           </div>
         </div>
+        <!-- <div class="row q-gutter-x-sm item-start">
+          <div>
+            <q-select
+              v-model="userPersonalInfoForm.user_designation"
+              @update:model-value="$emit('updateData', userPersonalInfoForm)"
+              outlined
+              dense
+              label="Disignation"
+              behavior="menu"
+              hide-dropdown-icon
+              :options="positionOptions"
+              :rules="[(val) => (val && val.length > 0) || 'Required']"
+              style="width: 160px; max-width: 500px; min-width: 100px"
+            />
+          </div>
+          <div>
+            <q-input
+              outlined
+              dense
+              v-model="userPersonalInfoForm.user_time"
+              label="Shifting Time"
+              type="time"
+              style="width: 140px; max-width: 500px; min-width: 100px"
+            />
+
+            <q-select
+              v-model="userPersonalInfoForm.user_time"
+              @update:model-value="$emit('updateData', userPersonalInfoForm)"
+              outlined
+              dense
+              hide-dropdown-icon
+              label="Position"
+              behavior="menu"
+              :options="positionOptions"
+              :rules="[(val) => (val && val.length > 0) || 'Required']"
+              style="width: 140px; max-width: 500px; min-width: 100px"
+            />
+          </div>
+          <div>
+            <q-select
+              v-model="userPersonalInfoForm.user_position"
+              @update:model-value="$emit('updateData', userPersonalInfoForm)"
+              outlined
+              dense
+              hide-dropdown-icon
+              label="Position"
+              behavior="menu"
+              :options="positionOptions"
+              :rules="[(val) => (val && val.length > 0) || 'Required']"
+              style="width: 150px; max-width: 500px; min-width: 100px"
+            />
+          </div>
+        </div> -->
         <div class="row q-gutter-x-md">
           <div>
             <q-input
@@ -104,6 +157,7 @@
               dense
               hide-dropdown-icon
               label="Position"
+              behavior="menu"
               :options="positionOptions"
               :rules="[(val) => (val && val.length > 0) || 'Required']"
               style="width: 150px; max-width: 500px; min-width: 100px"
@@ -153,8 +207,10 @@ const userPersonalInfoForm = reactive({
   user_birthdate: "",
   user_sex: "",
   user_status: "",
-  user_phone_number: "",
+  user_designation: "",
+  user_time: "",
   user_position: "",
+  user_phone_number: "",
 });
 
 onMounted(() => {

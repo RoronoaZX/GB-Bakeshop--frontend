@@ -1,22 +1,24 @@
 import { defineStore } from "pinia";
-// import {
-//   create_branch_product,
-//   delete_branch_product,
-//   get_all_branches_products,
-//   search_branch_id_service,
-//   update_branch_product_price,
-// } from "src/services/branches-id-service";
+import { api } from "src/boot/axios";
+import {
+  get_all_branches_products,
+  create_branch_product,
+  delete_branch_product,
+  update_branch_product_price,
+} from "src/services/product-per-branches-service";
 
-export const useBranchIdStore = defineStore("branchId", {
+export const useProductPerBranchesStore = defineStore("productPerBranches", {
   state: () => ({
-    branchId: [],
+    branchId: null,
     branchProducts: [],
   }),
 
   actions: {
-    async searchBranchId(searchQuery) {
-      const data = await search_branch_id_service(searchQuery);
-      this.branchId = data;
+    async fetchBranchProducts(branchId) {
+      this.branchId = branchId;
+
+      const response = await get_all_branches_products(branchId);
+      this.branchProducts = response.data;
     },
 
     async create(data) {
@@ -27,17 +29,9 @@ export const useBranchIdStore = defineStore("branchId", {
     async delete(id) {
       const result = await delete_branch_product(id);
       const index = this.branchProducts.findIndex((item) => item.id == id);
-      this.branchProducts.splice(index, 1);
-    },
-
-    // async fetchProductsByBranch(branchId) {
-    //   const response = await get_all_branches_products(branchId);
-    //   this.products = response.data;
-    // },
-
-    async fetchBranchProducts(branchId) {
-      const data = await get_all_branches_products(branchId);
-      this.branchProducts = data;
+      if (index > -1) {
+        this.branchProducts.splice(index, 1); // Ensure reactivity by using splice
+      }
     },
 
     async updatedBranchProductPrice(id, newPrice) {

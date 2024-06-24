@@ -19,7 +19,7 @@
   </div>
   <div>
     <q-table
-      class="my-sticky-dynamic elegant-container"
+      class="elegant-container sticky-header"
       :virtual-scroll-sticky-size-start="48"
       flat
       style="height: 400px"

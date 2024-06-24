@@ -23,7 +23,7 @@
   </div> -->
   <div>
     <q-table
-      class="table-container elegant-container"
+      class="table-container elegant-container sticky-header"
       :virtual-scroll-sticky-size-start="48"
       flat
       style="height: 400px"
