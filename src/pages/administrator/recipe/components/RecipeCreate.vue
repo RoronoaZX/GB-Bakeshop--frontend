@@ -30,16 +30,6 @@
           />
         </div>
         <div>
-          <div>Category</div>
-          <q-select
-            v-model="recipe.category"
-            outlined
-            dense
-            :options="categoryOptions"
-            :rules="[(val) => val && val.length > 0]"
-          />
-        </div>
-        <div>
           <div>Target Pcs</div>
           <q-input
             v-model="recipe.target"
@@ -185,10 +175,9 @@ const dialog = ref(false);
 const openAddRecipe = () => {
   dialog.value = true;
 };
-const categoryOptions = ["Bread", "Filling"];
+
 const recipe = reactive({
   name: "",
-  category: "",
   target: "",
 });
 
@@ -278,7 +267,6 @@ const filterIngredients = (val, update) => {
 const saveRecipe = async () => {
   const newData = {
     name: recipe.name,
-    category: recipe.category,
     target: recipe.target,
     breads: breadGroup.value.map((bread) => ({
       bread_id: bread.value,

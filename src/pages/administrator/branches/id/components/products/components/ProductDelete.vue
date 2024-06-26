@@ -29,19 +29,19 @@
 
 <script setup>
 import { Notify } from "quasar";
-import { useProductPerBranchesStore } from "src/stores/product-per-branches-store";
+import { useBranchIdStore } from "src/stores/branch-id-store";
 import { ref } from "vue";
 
-const productsPerBranchesstore = useProductPerBranchesStore();
+const branchIdStore = useBranchIdStore();
 const props = defineProps(["delete"]);
 
 const onDelete = async () => {
   try {
-    await productsPerBranchesstore.delete(props.delete.row.id);
+    await branchIdStore.delete(props.delete.row.id);
     Notify.create({
       type: "negative",
       icon: "warning",
-      message: `Ingredient successfully deleted`,
+      message: `Ingredient ${props.delete.row.name}  successfully deleted`,
       timeout: 1000,
       position: "top",
     });

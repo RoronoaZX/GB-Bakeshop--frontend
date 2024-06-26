@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-// import {
-//   create_branch_product,
-//   delete_branch_product,
-//   get_all_branches_products,
-//   search_branch_id_service,
-//   update_branch_product_price,
-// } from "src/services/branches-id-service";
+import {
+  create_branch_product,
+  delete_branch_product,
+  get_all_branches_products,
+  search_branch_id_service,
+  update_branch_product_price,
+} from "src/services/branches-id-service";
 
 export const useBranchIdStore = defineStore("branchId", {
   state: () => ({
@@ -30,13 +30,8 @@ export const useBranchIdStore = defineStore("branchId", {
       this.branchProducts.splice(index, 1);
     },
 
-    // async fetchProductsByBranch(branchId) {
-    //   const response = await get_all_branches_products(branchId);
-    //   this.products = response.data;
-    // },
-
-    async fetchBranchProducts(branchId) {
-      const data = await get_all_branches_products(branchId);
+    async fetchBranchProducts() {
+      const data = await get_all_branches_products();
       this.branchProducts = data;
     },
 

@@ -107,7 +107,7 @@
 
 <script setup>
 import { Notify } from "quasar";
-import { useProductPerBranchesStore } from "src/stores/product-per-branches-store";
+import { useBranchIdStore } from "src/stores/branch-id-store";
 import { useProductStore } from "src/stores/product-store";
 import { ref, reactive, computed } from "vue";
 import { useRoute } from "vue-router";
@@ -115,7 +115,7 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 const productStore = useProductStore();
 const productData = computed(() => productStore.products);
-const productPerBranchesStore = useProductPerBranchesStore();
+const branchIdStore = useBranchIdStore();
 
 const searchQuery = ref("");
 const search = async () => {
@@ -143,7 +143,7 @@ const addNewBranchProductForm = reactive({
 const createBranchProduct = async () => {
   try {
     const { product_name, ...dataToSend } = addNewBranchProductForm;
-    await productPerBranchesStore.create(dataToSend);
+    await branchIdStore.create(dataToSend);
     console.log(dataToSend);
 
     Notify.create({
@@ -155,7 +155,7 @@ const createBranchProduct = async () => {
     });
     dialog.value = false;
   } catch (error) {
-    console.error(error);
+    //
   }
 };
 </script>

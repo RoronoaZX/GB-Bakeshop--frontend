@@ -50,7 +50,6 @@ const routes = [
         component: () =>
           import("pages/administrator/branches/id/BranchIdPage.vue"),
         name: "BranchDetail",
-        props: true,
       },
       {
         path: "warehouse/:warehouse_id",
