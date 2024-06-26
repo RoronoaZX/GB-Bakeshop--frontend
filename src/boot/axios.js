@@ -1,31 +1,30 @@
 import { boot } from "quasar/wrappers";
 import axios from "axios";
+import { Cookies } from "quasar";
 import { LocalStorage } from "quasar";
 
-// Create an Axios instance
 axios.defaults.withCredentials = true;
-axios.defaults.withXSRFToken = true;
+
+axios.defaults.headers.common["X-CSRF-TOKEN"] = Cookies.get("XSRF-TOKEN");
 
 const api = axios.create({
   baseURL: process.env.API_BASE_URL || "http://localhost:8000/api",
 });
 
-// Intercept requests to add the authorization header
-api.interceptors.request.use(
-  (config) => {
-    const token = LocalStorage.getItem("authToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response.status === 419) {
+      // Fetch new CSRF token
+      // await axios.get("/sanctum/csrf-cookie");
+      // Retry original request
+      return axios(error.config);
     }
-    return config;
-  },
-  (error) => {
     return Promise.reject(error);
   }
 );
 
 export default boot(({ app }) => {
-  // Make Axios available throughout the app
   app.config.globalProperties.$axios = axios;
   app.config.globalProperties.$api = api;
 });

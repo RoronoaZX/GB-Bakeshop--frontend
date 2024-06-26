@@ -71,15 +71,15 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { useQuasar } from "quasar";
-import axios from "axios";
+import { Notify, useQuasar } from "quasar";
 import { useRouter } from "vue-router";
+import api from "src/boot/axios"; // Import the configured Axios instance
 
 const isPwd = ref(true);
-const username = ref("alverta25@example.net");
-const password = ref("admin123");
-
+const username = ref("admin@gmail.com");
+const password = ref("admin12345");
 const loading = ref(false);
+const user = ref(null);
 
 const formIsValid = computed(
   () => username.value !== "" && password.value !== ""
@@ -99,41 +99,28 @@ const login = async () => {
     return;
   }
 
-  try {
-    // const sanctumRes = await axios.get(
-    //   "http://127.0.0.1:8000/sanctum/csrf-cookie"
-    // ); // Fetch CSRF token
-    // console.log("sanctumRes:", sanctumRes);
-    const response = await axios.get(
-      `http://127.0.0.1:8000/api/auth/login?email=${username.value}&password=${password.value}`
-    );
+  loading.value = true;
 
-    if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("role", response.data.role);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-      quasar.notify({
-        position: "top",
-        color: "positive",
-        message: "Logged in successfully!",
-      });
-      console.log("response", response);
-      const role = response.data.user.role;
-      if (role === "Admin") {
-        router.push("/admin/dashboard");
-      } else if (role === "Super Admin") {
-        router.push("/admin/dashboard");
-      } else if (role === "Cashier") {
-        router.push("/branch/sales_lady");
-      } else if (role === "Baker") {
-        router.push("/branch/baker");
-      } else {
-        router.push("/");
-      }
-    }
-    loading.value = true;
+  try {
+    // await api.get("http://127.0.0.1:8000/sanctum/csrf-cookie"); // Fetch CSRF token
+
+    const response = await api.post("auth/login", {
+      email: username.value,
+      password: password.value,
+    });
+
+    const { data } = await api.get("http://127.0.0.1:8000/api/user");
+    user.value = data;
+
+    Notify.create({
+      position: "top",
+      color: "positive",
+      message: "Logged in successfully!",
+      timeout: 1000,
+    });
+
+    // Handle redirection based on user roles or other logic here
   } catch (error) {
-    console.log("error", error);
     quasar.notify({
       position: "top",
       color: "negative",
@@ -144,7 +131,6 @@ const login = async () => {
   }
 };
 </script>
-
 <style scoped>
 .text-primary {
   color: #f44336; /* Primary color for the welcome message */

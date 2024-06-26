@@ -15,9 +15,9 @@ const routes = [
   {
     path: "/admin",
     component: () => import("layouts/AdminLayout.vue"),
-    meta: {
-      // requiresAuth: true,
-    },
+    // meta: {
+    //   requiresAuth: true,
+    // },
     children: [
       {
         path: "dashboard",
@@ -175,5 +175,20 @@ const routes = [
 ];
 
 // Create the router instance
+// const router = createRouter({
+//   history: createWebHistory(),
+//   routes,
+// });
+
+// router.beforeEach((to, from, next) => {
+//   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+//   const token = LocalStorage.getItem("token");
+
+//   if (requiresAuth && !token) {
+//     next("/");
+//   } else {
+//     next();
+//   }
+// });
 
 export default routes;
