@@ -76,8 +76,14 @@ import { useRouter } from "vue-router";
 import api from "src/boot/axios"; // Import the configured Axios instance
 
 const isPwd = ref(true);
+<<<<<<< HEAD
 const username = ref("admin@gmail.com");
 const password = ref("admin12345");
+=======
+const username = ref("alverta25@example.net");
+const password = ref("admin123");
+
+>>>>>>> parent of 477a444 (added bearer token to fetch the user has middleware)
 const loading = ref(false);
 const user = ref(null);
 
@@ -101,6 +107,7 @@ const login = async () => {
 
   loading.value = true;
 
+<<<<<<< HEAD
   try {
     // await api.get("http://127.0.0.1:8000/sanctum/csrf-cookie"); // Fetch CSRF token
 
@@ -120,6 +127,32 @@ const login = async () => {
     });
 
     // Handle redirection based on user roles or other logic here
+=======
+    if (response.data.token) {
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("role", response.data.role);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      quasar.notify({
+        position: "top",
+        color: "positive",
+        message: "Logged in successfully!",
+      });
+      console.log("response", response);
+      const role = response.data.user.role;
+      if (role === "Admin") {
+        router.push("/admin/dashboard");
+      } else if (role === "Super Admin") {
+        router.push("/admin/dashboard");
+      } else if (role === "Cashier") {
+        router.push("/branch/sales_lady");
+      } else if (role === "Baker") {
+        router.push("/branch/baker");
+      } else {
+        router.push("/");
+      }
+    }
+    loading.value = true;
+>>>>>>> parent of 477a444 (added bearer token to fetch the user has middleware)
   } catch (error) {
     quasar.notify({
       position: "top",
